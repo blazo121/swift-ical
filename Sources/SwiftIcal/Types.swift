@@ -45,7 +45,14 @@ extension TimeZone {
 
     var icalComponent: LibicalComponent {
         loadZones()
-
+        
+        if self.identifier == "UTC" || self.identifier == "GMT" {
+            let tz = icaltimezone_get_utc_timezone()
+            let comp = icaltimezone_get_component(tz)
+            
+            return comp!
+        }
+        
         let tz = icaltimezone_get_builtin_timezone_from_tzid(self.identifier)
         let comp = icaltimezone_get_component(tz)
         
